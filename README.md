@@ -44,4 +44,20 @@
     - Importar no arquivo em setup/urls.py:
         from galeria.views import index
     - Configurar dentro do array 'urlpatterns'
-        path('', )
+        path('', index),
+
+# Organizando arquivo de rotas de apps
+    - Criar dentro da pasta do app o arquivo 'urls.py'
+    - importar o método path do django.urls
+    - importar o método index da galeria.views
+        from galeria.views import index
+    - Adicionar a lista de paths:
+        urlpatterns = [
+            path('', index)
+        ]
+    - Na pasta setup > urls.py adicionar o método include:
+        from django.urls import path, include
+    - Dentro do urlpatterns alterar index por include
+        urlpatterns = [
+            path('', include('galeria.urls'))
+        ]
