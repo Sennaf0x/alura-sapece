@@ -125,3 +125,8 @@
         {% block content %}{% endblock %}
         </body>
         ...
+# Criando partials
+    - Crie uma pasta em template\galeria chamado partials
+    - Crie um arquivo html com "_" na frente por convenção, exemplo: 
+        _footer.html
+    - Copie toda a informação da parte do código que você quer que permaneça na página
