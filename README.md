@@ -100,3 +100,28 @@
 
 # Ir para outra página quando clicar
     - Criar na pasta templates/galeria o arquivo imagem.html
+    - Configurar em views.py a rota para renderizar o imagem.html
+        def index(request):
+            return render(request, 'galeria/imagem.html')
+    - Configurar em galeria > urls.py a nova rota:
+        ...
+        from galeria.views import index, imagem
+        ...
+            urlpatterns = [
+                ...
+                path('imagem/', imagem, name = 'imagem')
+            ]   
+        ...
+    -Adicionar no imagem.html a função do python {% url 'imagem'%} em todos as ancoras que redicecionam para a pagina index:
+        Antes: <a href="imagem.html">
+        Depois <a href= "{% url 'imagem' %}">
+# Tornando o app menos repetivivo
+    - Criar um arquivo chamado base.html e copiar toda parte de <head> do index html.
+    - Apagar o <head>, <body> e <html> do index.html e imagem.html
+    - Nos respectivos arquivos html escrever {% extends 'galeria/base.html' %}, {% block content %} e {% endblock %}
+    - Adicionar no arquivo base.html o {% block content %} e {% endblock %} no <body>:
+        ...
+        <body>
+        {% block content %}{% endblock %}
+        </body>
+        ...
