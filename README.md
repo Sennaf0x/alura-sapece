@@ -28,4 +28,20 @@
 # Criando .gitignore
     - Entrar no site gitignore.io
     - Copiar o codigo para o django
-    
+# Criando novo app
+    - Com o ambiente do django ativado digitar:
+        python manage.py startapp nomedoapp
+    - No arquivo settings.py adicionar o app criado em INSTALLED_APPS
+        ...
+        'nomedoapp',
+        ...
+# Exibindo app criado
+    - Em galeria > views importar a biblioteca:
+        from django.http from HttpResponse
+    - Criar função:
+        def index(request):
+            return HttpResponde('<h1>Alura-Space</h1>')
+    - Importar no arquivo em setup/urls.py:
+        from galeria.views import index
+    - Configurar dentro do array 'urlpatterns'
+        path('', )
