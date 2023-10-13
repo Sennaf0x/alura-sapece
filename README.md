@@ -61,3 +61,19 @@
         urlpatterns = [
             path('', include('galeria.urls'))
         ]
+# Criando os templates
+    - Criar dentro da pasta principal uma pasta templates
+    - Na pasta setup > settings.py na linha de TEMPLATES adicionar:
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+
+# Criando HTML
+    - Criar na pasta template o index.html
+    - Apertar o botão '!' para que o html seja escrito automaticamente.
+    - Criar em <body> uma tag <h1>Teste</h1>:
+        <body>
+            <h1>Teste</h1>
+        </body>
+    - Em galeria > views alterar o HttpRequest para render:
+        def index(request):
+            return render(request, 'index.html') 
+    - Deletar o import do HttpResponse
