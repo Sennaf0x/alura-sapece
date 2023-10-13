@@ -77,3 +77,26 @@
         def index(request):
             return render(request, 'index.html') 
     - Deletar o import do HttpResponse
+
+# Carregando Front-End HTML e CSS
+    - copiar o frontend dado pela alura e copiar em index.html
+    - Em setup criar a pasta static
+    - Criar dentro da pasta static as pastas assets e styles
+    - Em settings.py criar o seguinte caminho de pasta:
+        STATICFILES_URL = [
+            os.path.join(BASE_DIR, 'SETUP/static')
+        ]
+        STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    - utilizar o comando para coleta de dados estáticos:
+        python manage.py collectstatic
+    - Dentro do index.html em templates\galeria adicionar o seguinte código:
+        {% load static %}
+        ...
+        <head>
+            ...
+             <link rel="stylesheet" href="{% static '/styles/style.css' %}">
+        </head>
+    - Em todos os arquivos estáticos <img src=""> colocar a tag {%Static ''%}
+
+# Ir para outra página quando clicar
+    - Criar na pasta templates/galeria o arquivo imagem.html
