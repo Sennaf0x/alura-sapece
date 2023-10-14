@@ -257,3 +257,31 @@
     - Crie uma variável categoria com a seguinte configuração:
         categoria = models.CharField(max_length=100, choices=OPCOES_CATEGORIA, default='')
     - Atualize os models com o comando python manage.py makemigrations e python manage.py migrate
+# Criando filtro por categoria no admin
+    - crie no arquivo admin.py uma nova linha:
+        list_filter = ("categoria")
+# Criando paginação no admin
+    - crie no arquivo admin.py uma nova linha:
+        list_per_page = 10
+# Criando funcionalidade de publicação
+    - crie no arquivo models.py uma nova linha dentro da classe Fotografia:
+        publicada = models.BooleanField(default=False)
+    - Executar os comandos makemigrations e migrate
+    - No arquivos views alterar no método index o objects.all():
+        fotografias = Fotografia.objects.**filter(publicada=True)** 
+    - Adicionar no admin.py:
+        list_display = ("id","nome", "legenda",**"publicada"**)
+        list_editable = ("publicada")
+# Adicionando data na publicação no admin
+    - Em models.py crie o seguinte campo:
+        data_fotogtafia = models.DateTimeField(defaut = datetime.now, blank =False)
+    - Importar o datetime:
+        from datetime import datetime
+    - Atualizar o models com makemigrations e migrate
+    - Inserir no admin o campo data_fotografia
+# Ordenar filtro
+    - Adicione em galeria > views.py a seguinte função:
+        def index(request):
+            fotografias = Fotografia.objects.**order_by("data_fotografia")**.filter(publicada=True) 
+        return render(request, 'galeria/index.html', {"cards": fotografias})
+    
