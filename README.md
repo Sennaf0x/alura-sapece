@@ -190,3 +190,70 @@
         foto = Fotografia(nome ="Nebulosa de Úrsula", legenda ="webbtelescope.org / NASA / James Webb",foto = "carina-foto.png)
     - salve o dado:
         foto.save()
+# Importando dados do shell 
+    - Em galeria > views.py substituir o dicionário pela classe fotografia:
+        
+        from django.shortcuts import render
+        **from galeria.models import Fotografia**
+
+        def index(request):
+            **fotografias = Fotografia.objects.all()** 
+            return render(request, 'galeria/index.html', {"cards": **fotografias**})
+
+        def imagem(request):
+            return render(request, 'galeria/imagem.html')
+
+    - Alterar no index.html o código do {% for %} e inserir um {% if %}
+        <ul class="cards__lista">
+                            **{% if cards%}**
+                            {% for **fotografia** in **cards** %}
+                            <li class="card">
+                            ...
+                            {% else %}
+                            {% endif %}
+    - Alterar info.nome  por fotografia.nome, info.legenda por fotografia legenda
+    - Adicionar no src da imagem a seguinte chamada do banco de dados:
+        
+        <img class="card__imagem" src="{% static '/assets/imagens/galeria/'%}**{{ fotografia.foto }}**" alt="foto">
+# Passando o id da imagem ao clicar na foto
+    - Adicionar à referência {% url 'imagem' %} o valor do id:
+        {% url 'imagem' fotografia_id%}
+    - Adiciona ro valor do id na url da página de imagens em urls.py:
+        path('imagem/<int:foto_id>', imagem, name='imagem'),
+    - Adicionar no arquivo views.py no método que istancia as imagens o foto_id após o request:
+        def imagem(request, foto_id):
+    - Importar o método get_objects_or_404
+        from django.shortcuts import render, **get_object_or_404**
+    - Dentro do método que instancia a imagem passamos nossomodel e seu valor:
+        fotografia = get_object_or_404(Fotografia, pk=foto_id)
+    - É adicionado no return um dicionário com valor fotografia:
+        return render(request, 'galeria/imagem.html', {"fotografia": fotografia})
+    - Por fim, passar os valores de fotografia.nome, fotografia.foto e fotografia.legenda nos seus respectivos campos no imagem.html.
+
+# Django admin, criando super usuario
+    - Execute o comando python manage.py createsuperuser e adicione login e senha.
+    - Entre no admin do django 127.0.0.1:8000/admin
+# Criando CRUD no admin
+    - Entre no arquivo galeria > admin.py e configurar o admin:
+        from django.contrib import admin
+        from galeria.models import Fotografia
+    
+        class ListandoFotografias(admin.ModelAdmin):
+            list_display = ("id","nome", "legenda")
+            list_displaylinks = ("id","nome")
+            search_fields =("nome",)
+
+    admin.site.register(Fotografia, ListandoFotografias)
+# Criando categorias
+    - Cria uma lista no models.py dentro da classe Fotografia
+    
+
+        OPCOES_CATEGORIA = [
+            ("NEBULOSA"),
+            ("ESTRELA"),
+            ("GALÁXIA"),
+            ("PLANETA")
+        ]
+    - Crie uma variável categoria com a seguinte configuração:
+        categoria = models.CharField(max_length=100, choices=OPCOES_CATEGORIA, default='')
+    - Atualize os models com o comando python manage.py makemigrations e python manage.py migrate
