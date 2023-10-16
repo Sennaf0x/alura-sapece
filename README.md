@@ -284,4 +284,54 @@
         def index(request):
             fotografias = Fotografia.objects.**order_by("data_fotografia")**.filter(publicada=True) 
         return render(request, 'galeria/index.html', {"cards": fotografias})
+# Fazendo upload de imagens
+    - No diretório setting.py crie as seguinte regras gerais:
+        # Media
+        MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+        MEDIA_URL = "/media/" 
+    - Em setup > urls.py importar settings e static 
+
+        from django.conf import settings
+        from django.conf.urls.static import static
+        
+        urlpatterns = [
+            path("admin/", admin.site.urls),
+            path('', include('galeria.urls')),
+        ]** + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)** 
+    - Em galeria > models alterar a variável foto:
+            foto = models.ImageField(upload_to="fotos/%Y/%m/%d/", blank=True)
+
+# Criando photo not found
+    - Em index.html adicionar:
     
+        {% if fotografia.foto == "" or fotografia.foto == null %}
+            <img class="card__imagem" src="{% static '/assets/imagens/galeria/not-found.png' %}" alt="foto">
+        {% else %}
+            <img class="card__imagem" src="{{fotografia.foto.url}}" alt="foto">
+        {% endif %}
+    - Fazer o mesmo no imagem.html
+# Criando campo de busca
+    - Adicione em galeria > urls.py dentro de urlpatterns:
+        path('buscar', buscar, name="buscar")
+    - Em galeria > views crie um novo metodo buscar:
+        def buscar(request):
+        fotografias = Fotografia.objects.order_by("data_fotografia").filter(publicada=True)
+            if "buscar" in request.GET:
+                nome_a_buscar = request.GET['buscar']
+            if nome_a_buscar:
+                fotografias = fotografias.filter(nome__icontains=nome_a_buscar) 
+            
+        return render(request, "galeria/buscar.html", {"cards": fotografias})
+
+    - Volte ao arquivo urls.py e import buscar
+        from galeria.views import   
+    - Adicionar uma tag de form e button no header.html
+            <form action="{% url 'buscar' %}">
+                <input class="busca__input" type="text" name="buscar" placeholder="O que você procura?">
+                <button type="submit">
+                    <img class="busca__icone" src="{% static '/assets/ícones/1x/search.png' %}" alt="ícone de search">
+                </button>
+            </form> 
+
+    - Criar em template > galeria o arquivo buscar.html e copiar o conteudo do index.html.
